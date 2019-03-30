@@ -1,0 +1,51 @@
+import java.util.Map;
+import java.util.HashMap;
+
+public class iHeartMedia {
+
+	public static int[] addToX(int x, int[] ray) {
+		// Will contain both values that add to X
+		int[] result = new int[2];
+		Map<Integer, Integer> map = new HashMap<>();
+
+		if (ray.length == 0 || ray.length == 1) {
+			return result;
+		}
+		// Put elements of array into HashMap for O(1) lookup
+		for (int i = 0; i < ray.length; i++) {
+			if (map.put(ray[i], 1) != null) {
+				// Value of key that occurs multiple times will just be 2
+				map.put(ray[i], 2);
+			}
+		}
+
+		// Iterate over keySet, then search for complement of each value, (x - p)
+		// If value is present, solution is found and save values in resulting array
+		for (int p : map.keySet()) {
+			int currval = map.get(p);
+			if (map.containsKey(x - p)) {
+				// First Case: Current Key is half of X
+				if (p == x - p) {
+					// If there are multiple occurrences of that key in the original array,
+					// Then solution is found
+					if (currval == 2) {
+						result[0] = p;
+						result[1] = p;
+						return result;
+					}
+				} else {
+					result[0] = p;
+					result[1] = x - p;
+					return result;
+				}
+			}
+		}
+		return result;
+	}
+}
+
+// Alternate Solution O(N^2) Brute Force:
+/*
+ * for(int i = 0; i < ray.length; i++){ for(int p = 0; p < ray.length; p++){
+ * if(ray[i] + ray[p] = x){ SOLUTION FOUND } } }
+ */
